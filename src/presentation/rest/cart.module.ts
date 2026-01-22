@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { CartController } from '@presentation/rest/controllers/cart.controller';
+import { CartResolver } from '@presentation/graphql/resolvers/cart.resolver';
 import { AddItemToCartUseCase } from '@application/use-cases/commands/add-item-to-cart.use-case';
 import { UpdateCartItemQuantityUseCase } from '@application/use-cases/commands/update-cart-item-quantity.use-case';
 import { RemoveItemFromCartUseCase } from '@application/use-cases/commands/remove-item-from-cart.use-case';
@@ -12,6 +13,7 @@ import { ICartRepository } from '@application/ports/out/cart-repository.interfac
 @Module({
   controllers: [CartController],
   providers: [
+    CartResolver,
     {
       provide: ICartRepository,
       useClass: RedisCartRepository,

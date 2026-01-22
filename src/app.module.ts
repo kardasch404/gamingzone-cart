@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import appConfig from '@shared/config/app.config';
 import databaseConfig from '@shared/config/database.config';
 import redisConfig from '@shared/config/redis.config';
@@ -13,6 +15,11 @@ import { CartModule } from '@presentation/rest/cart.module';
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
       load: [appConfig, databaseConfig, redisConfig],
+    }),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: true,
+      playground: true,
     }),
     RedisModule,
     PrismaModule,
