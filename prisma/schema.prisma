@@ -7,13 +7,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Cart {
-  id        String   @id @default(uuid())
-  userId    String   @map("user_id")
-  items     Json
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+model CartBackup {
+  id         String   @id
+  userId     String   @unique @map("user_id")
+  items      Json
+  subtotal   Decimal  @db.Decimal(10, 2)
+  total      Decimal  @db.Decimal(10, 2)
+  currency   String   @default("MAD")
+  lastSyncAt DateTime @default(now()) @map("last_sync_at")
+  createdAt  DateTime @default(now()) @map("created_at")
 
-  @@map("carts")
+  @@map("cart_backups")
   @@index([userId])
+  @@index([lastSyncAt])
 }
