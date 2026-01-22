@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { ThrottlerModule } from '@nestjs/throttler';
 import appConfig from '@shared/config/app.config';
 import databaseConfig from '@shared/config/database.config';
 import redisConfig from '@shared/config/redis.config';
@@ -16,6 +17,10 @@ import { CartModule } from '@presentation/rest/cart.module';
       envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
       load: [appConfig, databaseConfig, redisConfig],
     }),
+    ThrottlerModule.forRoot([{
+      ttl: 60000,
+      limit: 100,
+    }]),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
