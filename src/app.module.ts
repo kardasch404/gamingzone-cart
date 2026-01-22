@@ -5,6 +5,7 @@ import databaseConfig from '@shared/config/database.config';
 import redisConfig from '@shared/config/redis.config';
 import { RedisModule } from '@infrastructure/cache/redis/redis.module';
 import { PrismaModule } from '@infrastructure/database/prisma/prisma.module';
+import { CartModule } from '@presentation/rest/cart.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { PrismaModule } from '@infrastructure/database/prisma/prisma.module';
     }),
     RedisModule,
     PrismaModule,
+    CartModule,
   ],
   controllers: [],
   providers: [],
