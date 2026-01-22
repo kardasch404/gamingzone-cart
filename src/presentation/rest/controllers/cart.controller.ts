@@ -5,9 +5,11 @@ import { UpdateCartItemQuantityUseCase } from '@application/use-cases/commands/u
 import { RemoveItemFromCartUseCase } from '@application/use-cases/commands/remove-item-from-cart.use-case';
 import { ClearCartUseCase } from '@application/use-cases/commands/clear-cart.use-case';
 import { ValidateCartForCheckoutUseCase } from '@application/use-cases/commands/validate-cart-for-checkout.use-case';
+import { MergeCartUseCase } from '@application/use-cases/commands/merge-cart.use-case';
 import { GetCartQuery } from '@application/use-cases/queries/get-cart.query';
 import { AddItemToCartDto } from '@application/dto/request/add-item-to-cart.dto';
 import { UpdateCartItemDto } from '@application/dto/request/update-cart-item.dto';
+import { MergeCartDto } from '@application/dto/request/merge-cart.dto';
 import { CartDto } from '@application/dto/response/cart.dto';
 
 @ApiTags('cart')
@@ -19,6 +21,7 @@ export class CartController {
     private readonly removeItemUseCase: RemoveItemFromCartUseCase,
     private readonly clearCartUseCase: ClearCartUseCase,
     private readonly validateCartUseCase: ValidateCartForCheckoutUseCase,
+    private readonly mergeCartUseCase: MergeCartUseCase,
     private readonly getCartQuery: GetCartQuery,
   ) {}
 
@@ -64,10 +67,10 @@ export class CartController {
     return this.clearCartUseCase.execute(userId);
   }
 
-  @Post('validate')
-  @ApiOperation({ summary: 'Validate cart before checkout' })
-  @ApiResponse({ status: 200, description: 'Validation result' })
-  async validateCart(@Body('userId') userId: string) {
-    return this.validateCartUseCase.execute(userId);
+  @Post('merge')
+  @ApiOperation({ summary: 'Merge guest cart with user cart' })
+  @ApiResponse({ status: 200, description: 'Carts merged', type: CartDto })
+  async mergeCart(@Body() dto: MergeCartDto): Promise<CartDto> {
+    return this.mergeCartUseCase.execute(dto);
   }
 }
